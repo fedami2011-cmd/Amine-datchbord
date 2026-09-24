@@ -8,9 +8,10 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
   const navItems = [
-    { name: 'ROI & Time Calculator', icon: '💰' },
-    { name: 'Client Performance Dashboard', icon: '📈' },
-    { name: 'Agency Hub & Contact', icon: '🏢' },
+    { name: 'Automated Emergency Response', icon: '⚡️' },
+    { name: 'Smart Technician Scheduling', icon: '📅' },
+    { name: 'Quote & Invoice Follow-Up', icon: '💸' },
+    { name: 'Google Review Booster', icon: '⭐' },
   ];
 
   return (

@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { 
-  FaGoogle, 
-  FaSignOutAlt, 
-  FaCalculator, 
-  FaChartLine, 
-  FaUserCheck, 
-  FaRobot, 
-  FaClock, 
+import {
+  FaGoogle,
+  FaSignOutAlt,
+  FaCalculator,
+  FaChartLine,
+  FaUserCheck,
+  FaRobot,
+  FaClock,
   FaDollarSign,
   FaPaperPlane,
   FaCheckCircle,
@@ -19,19 +19,21 @@ import {
   FaEnvelope,
   FaExternalLinkAlt,
   FaBolt,
-  FaTrophy
 } from "react-icons/fa";
+import { User } from "@supabase/supabase-js";
 
 // Supabase Direct Initialization
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const N8N_WEBHOOK_URL = "https://n8n-production-4ccd.up.railway.app/webhook/agency-demo";
+const N8N_WEBHOOK_URL =
+  "https://n8n-production-4ccd.up.railway.app/webhook/agency-demo";
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState<"calculator" | "leads" | "about">("calculator");
-  const [user, setUser] = useState<any>(null);
+  const [activeTab, setActiveTab] =
+    useState<"calculator" | "leads" | "about">("calculator");
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [sendingWebhook, setSendingWebhook] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
@@ -39,20 +41,20 @@ export default function Dashboard() {
   // Calculator State
   const [leadName, setLeadName] = useState("");
   const [leadEmail, setLeadEmail] = useState("");
-  const [adSpend, setAdSpend] = useState<number>(5000);
-  const [hoursSpent, setHoursSpent] = useState<number>(15);
+  const [activeTechnicians, setActiveTechnicians] = useState<number>(5);
+  const [missedCalls, setMissedCalls] = useState<number>(15);
 
-  const estimatedLeads = Math.round(adSpend / 40);
-  const estimatedRoi = adSpend * 4;
-  const hoursSaved = Math.round(hoursSpent * 0.75 * 4);
-  const leadTier = adSpend >= 5000 || hoursSpent >= 20 ? "VIP High-Ticket" : "Standard Lead";
+  const recoveredRevenue = missedCalls * 425; // Average repair job value: $350-$500, using $425
+  const responseSpeed = "< 30s";
+  const autoBookedTickets = "85+/mo";
+  const dispatchTier = missedCalls >= 10 ? "24/7 Auto-Booked" : "Standard Dispatch";
 
   // Mock Leads for Dashboard Demo
   const mockLeads = [
-    { id: 1, name: "Sami Tech LLC", email: "contact@samitech.dz", budget: "$12,000", saved: "45 hrs", tier: "VIP High-Ticket", status: "Automated" },
-    { id: 2, name: "Karim E-Com", email: "karim@store.com", budget: "$3,500", saved: "15 hrs", tier: "Standard Lead", status: "Processed" },
-    { id: 3, name: "Yassine Real Estate", email: "yassine@immo.dz", budget: "$8,000", saved: "30 hrs", tier: "VIP High-Ticket", status: "Automated" },
-    { id: 4, name: "Nour Startups", email: "hello@nour.dev", budget: "$1,500", saved: "10 hrs", tier: "Standard Lead", status: "Pending" }
+    { id: 1, name: "CoolBreeze HVAC", email: "service@coolbreeze.com", budget: "$15,000", saved: "55 hrs", tier: "VIP High-Ticket", status: "Automated" },
+    { id: 2, name: "FrostyFix Repairs", email: "contact@frostyfix.com", budget: "$5,000", saved: "20 hrs", tier: "Standard Lead", status: "Processed" },
+    { id: 3, name: "Heating Heroes", email: "support@heatingheroes.net", budget: "$10,000", saved: "40 hrs", tier: "VIP High-Ticket", status: "Automated" },
+    { id: 4, name: "Airflow Pros", email: "dispatch@airflowpros.io", budget: "$2,500", saved: "12 hrs", tier: "Standard Lead", status: "Pending" }
   ];
 
   useEffect(() => {
@@ -96,41 +98,41 @@ export default function Dashboard() {
   };
 
   const handleCalculateAndSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSendingWebhook(true);
-    setSuccessMsg("");
+  e.preventDefault();
+  setSendingWebhook(true);
+  setSuccessMsg("");
 
-    const payload = {
-      agency_name: "Amine Digital Solutions",
-      lead_name: leadName || "Valued Client",
-      lead_email: leadEmail || "client@example.com",
-      monthly_ad_spend: adSpend,
-      hours_spent: hoursSpent,
-      hours_saved: hoursSaved,
-      estimated_leads: estimatedLeads,
-      estimated_roi: estimatedRoi,
-      lead_score: leadTier,
-    };
-
-    try {
-      const res = await fetch(N8N_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        setSuccessMsg("Assessment calculated and report sent via automation successfully!");
-      } else {
-        setSuccessMsg("Submitted! Assessment logged for processing.");
-      }
-    } catch (err) {
-      console.error("Webhook submission error:", err);
-      setSuccessMsg("Assessment calculated! Data synced.");
-    } finally {
-      setSendingWebhook(false);
-    }
+  const payload = {
+    agency_name: "Amine Digital Solutions",
+    lead_name: leadName || "Valued Client",
+    lead_email: leadEmail || "client@example.com",
+    active_technicians: activeTechnicians,
+    weekly_missed_calls: missedCalls,
+    recovered_revenue: recoveredRevenue,
+    response_speed: responseSpeed,
+    auto_booked_tickets: autoBookedTickets,
+    dispatch_tier: dispatchTier,
   };
+
+  try {
+    const res = await fetch(N8N_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      setSuccessMsg("Assessment calculated and report sent via automation successfully!");
+    } else {
+      setSuccessMsg("Submitted! Assessment logged for processing.");
+    }
+  } catch (err) {
+    console.error("Webhook submission error:", err);
+    setSuccessMsg("Assessment calculated! Data synced.");
+  } finally {
+    setSendingWebhook(false);
+  }
+};
 
   if (loading) {
     return (
@@ -163,7 +165,7 @@ export default function Dashboard() {
             }`}
           >
             <FaCalculator />
-            <span>ROI Engine</span>
+            <span>HVAC Dispatch Calculator</span>
           </button>
           <button
             onClick={() => setActiveTab("leads")}
@@ -231,7 +233,7 @@ export default function Dashboard() {
               <div>
                 <div className="flex items-center space-x-3 mb-6">
                   <FaCalculator className="text-blue-500 text-2xl" />
-                  <h2 className="text-xl font-bold text-white">Automation & ROI Assessment Engine</h2>
+                  <h2 className="text-xl font-bold text-white">HVAC Dispatch & Emergency ROI Calculator</h2>
                 </div>
 
                 <form onSubmit={handleCalculateAndSubmit} className="space-y-5">
@@ -254,7 +256,7 @@ export default function Dashboard() {
                         required
                         value={leadEmail}
                         onChange={(e) => setLeadEmail(e.target.value)}
-                        placeholder="john@agency.com"
+                        placeholder="john@hvac-pros.com"
                         className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
                       />
                     </div>
@@ -262,32 +264,32 @@ export default function Dashboard() {
 
                   <div>
                     <div className="flex justify-between items-center mb-1">
-                      <label className="text-xs font-semibold text-gray-400">Monthly Ad Budget ($)</label>
-                      <span className="text-sm font-bold text-blue-400">${adSpend.toLocaleString()}</span>
+                      <label className="text-xs font-semibold text-gray-400">Active Field Technicians</label>
+                      <span className="text-sm font-bold text-blue-400">{activeTechnicians} techs</span>
                     </div>
                     <input
                       type="range"
-                      min="500"
-                      max="20000"
-                      step="500"
-                      value={adSpend}
-                      onChange={(e) => setAdSpend(Number(e.target.value))}
+                      min="1"
+                      max="50"
+                      step="1"
+                      value={activeTechnicians}
+                      onChange={(e) => setActiveTechnicians(Number(e.target.value))}
                       className="w-full accent-blue-500 h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
 
                   <div>
                     <div className="flex justify-between items-center mb-1">
-                      <label className="text-xs font-semibold text-gray-400">Weekly Hours Spent on Manual Operations</label>
-                      <span className="text-sm font-bold text-indigo-400">{hoursSpent} hrs/week</span>
+                      <label className="text-xs font-semibold text-gray-400">Weekly Missed After-Hours Emergency Calls</label>
+                      <span className="text-sm font-bold text-indigo-400">{missedCalls} calls/week</span>
                     </div>
                     <input
                       type="range"
-                      min="2"
-                      max="60"
+                      min="0"
+                      max="50"
                       step="1"
-                      value={hoursSpent}
-                      onChange={(e) => setHoursSpent(Number(e.target.value))}
+                      value={missedCalls}
+                      onChange={(e) => setMissedCalls(Number(e.target.value))}
                       className="w-full accent-indigo-500 h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
@@ -298,11 +300,11 @@ export default function Dashboard() {
                     className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl transition shadow-lg flex items-center justify-center space-x-2 text-sm disabled:opacity-50"
                   >
                     {sendingWebhook ? (
-                      <span>Processing Automation...</span>
+                      <span>Processing Simulation...</span>
                     ) : (
                       <>
                         <FaPaperPlane />
-                        <span>Run ROI Assessment & Trigger Automation</span>
+                        <span>Simulate HVAC Automation & Dispatch Pipeline 🚀</span>
                       </>
                     )}
                   </button>
@@ -326,8 +328,8 @@ export default function Dashboard() {
 
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400 font-medium">Projected Revenue Growth</p>
-                  <h3 className="text-2xl font-extrabold text-emerald-400 mt-1">${estimatedRoi.toLocaleString()}</h3>
+                  <p className="text-xs text-gray-400 font-medium">Recovered Revenue From Emergency Calls</p>
+                  <h3 className="text-2xl font-extrabold text-emerald-400 mt-1">${recoveredRevenue.toLocaleString()}</h3>
                 </div>
                 <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 text-emerald-400">
                   <FaDollarSign className="text-xl" />
@@ -336,8 +338,8 @@ export default function Dashboard() {
 
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400 font-medium">Estimated Time Saved</p>
-                  <h3 className="text-2xl font-extrabold text-indigo-400 mt-1">~{hoursSaved} hrs/mo</h3>
+                  <p className="text-xs text-gray-400 font-medium">Emergency Response Speed</p>
+                  <h3 className="text-2xl font-extrabold text-indigo-400 mt-1">{responseSpeed}</h3>
                 </div>
                 <div className="bg-indigo-500/10 p-3 rounded-xl border border-indigo-500/20 text-indigo-400">
                   <FaClock className="text-xl" />
@@ -346,8 +348,8 @@ export default function Dashboard() {
 
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-400 font-medium">Estimated Qualified Leads</p>
-                  <h3 className="text-2xl font-extrabold text-blue-400 mt-1">~{estimatedLeads} leads</h3>
+                  <p className="text-xs text-gray-400 font-medium">Auto-Booked Repair Tickets</p>
+                  <h3 className="text-2xl font-extrabold text-blue-400 mt-1">{autoBookedTickets}</h3>
                 </div>
                 <div className="bg-blue-500/10 p-3 rounded-xl border border-blue-500/20 text-blue-400">
                   <FaUserCheck className="text-xl" />
@@ -358,13 +360,13 @@ export default function Dashboard() {
                 <p className="text-xs text-gray-400 font-medium mb-1">Lead Qualification Tier</p>
                 <div className="flex items-center justify-between">
                   <span className={`text-sm font-bold px-3 py-1 rounded-full border ${
-                    leadTier === "VIP High-Ticket" 
+                    dispatchTier === "24/7 Auto-Booked" 
                       ? "bg-amber-500/10 text-amber-400 border-amber-500/30" 
                       : "bg-blue-500/10 text-blue-400 border-blue-500/30"
                   }`}>
-                    {leadTier}
+                    {dispatchTier}
                   </span>
-                  <span className="text-xs text-gray-500">n8n VIP Route Trigger</span>
+                  <span className="text-xs text-gray-500">n8n Emergency Dispatch Pipeline</span>
                 </div>
               </div>
             </div>
@@ -385,32 +387,40 @@ export default function Dashboard() {
             </div>
 
             {/* Analytics Banner */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Total Hours Saved</span>
+                  <span className="text-sm text-gray-400">Response Time</span>
                   <FaClock className="text-indigo-400" />
                 </div>
-                <h3 className="text-3xl font-black text-white">1,240 <span className="text-lg font-medium text-gray-500">hrs</span></h3>
-                <p className="text-xs text-emerald-400 mt-2 font-medium">+15% this month</p>
+                <h3 className="text-3xl font-black text-white">&lt; 28s</h3>
+                <p className="text-xs text-emerald-400 mt-2 font-medium">Speed to lead for emergency calls</p>
               </div>
               
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Optimized Ad Budget</span>
-                  <FaDollarSign className="text-emerald-400" />
+                  <span className="text-sm text-gray-400">Booked Jobs Rate</span>
+                  <FaCheckCircle className="text-emerald-400" />
                 </div>
-                <h3 className="text-3xl font-black text-white">$25.5K</h3>
-                <p className="text-xs text-emerald-400 mt-2 font-medium">Across all active clients</p>
+                <h3 className="text-3xl font-black text-white">68.4%</h3>
+                <p className="text-xs text-emerald-400 mt-2 font-medium">Inquiries converted into paid field visits</p>
               </div>
 
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Automation Efficiency</span>
+                  <span className="text-sm text-gray-400">Technician Utilization</span>
                   <FaBolt className="text-amber-400" />
                 </div>
-                <h3 className="text-3xl font-black text-white">92%</h3>
-                <p className="text-xs text-gray-400 mt-2 font-medium">Reduction in manual tasks</p>
+                <h3 className="text-3xl font-black text-white">91.2%</h3>
+                <p className="text-xs text-gray-400 mt-2 font-medium">Optimized daily routes with zero double-booking</p>
+              </div>
+              <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-400">Quote Conversion Speed</span>
+                  <FaDollarSign className="text-emerald-400" />
+                </div>
+                <h3 className="text-3xl font-black text-white">2.4 hrs</h3>
+                <p className="text-xs text-emerald-400 mt-2 font-medium">Fast approval on sent repair estimates</p>
               </div>
             </div>
 
@@ -467,24 +477,54 @@ export default function Dashboard() {
             {/* Intro Section */}
             <div className="bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-800 rounded-3xl p-8 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 opacity-10">
-                <FaTrophy className="text-9xl text-blue-500" />
+                <FaBolt className="text-9xl text-blue-500" />
               </div>
               <div className="relative z-10 max-w-2xl">
-                <span className="text-blue-500 font-bold tracking-wider text-xs uppercase mb-3 block">Founder & Automation Architect</span>
-                <h2 className="text-3xl font-black text-white mb-2">Feddane Mohamed Amine</h2>
-                <h3 className="text-lg text-gray-400 mb-5">Amine Digital Solutions (Est. June 2026, Algeria)</h3>
+                <span className="text-blue-500 font-bold tracking-wider text-xs uppercase mb-3 block">HVAC Automation Specialist</span>
+                <h2 className="text-3xl font-black text-white mb-2">Eliminate Missed Emergency Calls & Maximize Technician Efficiency</h2>
+                <h3 className="text-lg text-gray-400 mb-5">AI-Powered Dispatch for HVAC Contractors</h3>
                 
                 <p className="text-gray-300 leading-relaxed mb-6">
-                  At Amine Digital Solutions, we specialize in pioneering next-generation business systems. Founded in Algeria, our core focus is engineering advanced **AI Automation**, high-converting **Lead Generation** funnels, and deploying autonomous **AI Agents**. We are dedicated to pushing the boundaries of what's possible, paving the way for AGI-integrated workflows that eliminate manual bottlenecks.
-                </p>
+                   Custom n8n & AI automation engines for HVAC contractors. We convert emergency calls into booked repair tickets in under 30 seconds—24/7, eliminating missed opportunities and manual dispatching. Our system sends jobs directly to your field technicians&apos; calendars to maximize billable hours.
+                  </p>
                 
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-gray-800 text-blue-400 text-xs rounded-full font-bold border border-blue-900/50">AI Agents</span>
-                  <span className="px-3 py-1 bg-gray-800 text-emerald-400 text-xs rounded-full font-bold border border-emerald-900/50">Lead Generation</span>
-                  <span className="px-3 py-1 bg-gray-800 text-indigo-400 text-xs rounded-full font-bold border border-indigo-900/50">AGI Systems</span>
-                  <span className="px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full font-bold border border-gray-700">Workflow Automation</span>
+                  <span className="px-3 py-1 bg-gray-800 text-blue-400 text-xs rounded-full font-bold border border-blue-900/50">24/7 Call Handling</span>
+                  <span className="px-3 py-1 bg-gray-800 text-emerald-400 text-xs rounded-full font-bold border border-emerald-900/50">Automated Dispatch</span>
+                  <span className="px-3 py-1 bg-gray-800 text-indigo-400 text-xs rounded-full font-bold border border-indigo-900/50">Technician Scheduling</span>
+                  <span className="px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full font-bold border border-gray-700">n8n Workflows</span>
                 </div>
               </div>
+            </div>
+
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                <FaRobot className="text-indigo-400" />
+                <span>HVAC Automation Architecture</span>
+              </h3>
+              <ol className="relative border-l border-gray-700 space-y-6">
+                <li className="ml-6">
+                  <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">
+                    <span className="text-blue-400 text-xs font-bold">1</span>
+                  </span>
+                  <h4 className="font-semibold text-white">Input</h4>
+                  <p className="text-sm text-gray-400">Emergency Call / WhatsApp / Web Form is received. Gemini 1.5 Flash parses issue severity and client location.</p>
+                </li>
+                <li className="ml-6">
+                  <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">
+                    <span className="text-blue-400 text-xs font-bold">2</span>
+                  </span>
+                  <h4 className="font-semibold text-white">Automation Engine</h4>
+                  <p className="text-sm text-gray-400">n8n workflow checks tech calendars & writes to Supabase / Google Sheets.</p>
+                </li>
+                <li className="ml-6">
+                  <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">
+                    <span className="text-blue-400 text-xs font-bold">3</span>
+                  </span>
+                  <h4 className="font-semibold text-white">Output</h4>
+                  <p className="text-sm text-gray-400">Instant WhatsApp confirmation with ETA to client + Notification to dispatcher.</p>
+                </li>
+              </ol>
             </div>
 
             {/* Links Grid */}

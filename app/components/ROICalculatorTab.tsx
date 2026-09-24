@@ -4,8 +4,8 @@
 import React, { useState } from 'react'; // Removed useEffect as it's no longer needed for derived state
 
 const ROICalculatorTab = () => {
-  const [adBudget, setAdBudget] = useState(5000);
-  const [hoursSpent, setHoursSpent] = useState(10);
+  const [emergencyCalls, setEmergencyCalls] = useState(50);
+  const [dispatchTime, setDispatchTime] = useState(15);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -15,9 +15,9 @@ const ROICalculatorTab = () => {
 
   const webhookUrl = 'https://n8n-production-4ccd.up.railway.app/webhook/agency-demo';
 
-  // Derived state - calculated directly
-  const projectedROI = adBudget * 4; // ROI Calculation: Estimated ROI = Ad Spend * 4
-  const hoursSaved = hoursSpent * 4; // Time Saved Calculation: Assuming 4 weeks per month
+  // Derived state for HVAC KPIs
+  const bookedJobsRate = 68.4; // Static for demo
+  const technicianUtilization = 91.2; // Static for demo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,11 +34,11 @@ const ROICalculatorTab = () => {
         body: JSON.stringify({
           name,
           email,
-          adBudget,
-          hoursSpent,
-          projectedROI,
-          hoursSaved,
-          action: 'roi_automation_demo',
+          emergencyCalls,
+          dispatchTime,
+          bookedJobsRate,
+          technicianUtilization,
+          action: 'hvac_automation_demo',
         }),
       });
 
@@ -49,7 +49,7 @@ const ROICalculatorTab = () => {
       } else {
         setError('Failed to start live demo. Please try again.');
       }
-    } catch (err: unknown) { // Changed 'any' to 'unknown'
+    } catch (err: unknown) {
       setError('An error occurred while starting the live demo.');
       console.error('Error starting live demo:', err);
     } finally {
@@ -59,39 +59,39 @@ const ROICalculatorTab = () => {
 
   return (
     <div className="p-6 bg-gray-800 rounded-lg shadow-md text-white">
-      <h2 className="text-2xl font-bold mb-6 text-center">ROI & Time Savings Calculator + Automation Demo</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">HVAC Automation & Efficiency Calculator</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Monthly Ad Spend Input */}
+        {/* Monthly Emergency Calls Input */}
         <div>
-          <label htmlFor="adBudget" className="block text-lg font-medium mb-2">
-            Monthly Ad Budget ($): <span className="text-blue-400">${adBudget}</span>
+          <label htmlFor="emergencyCalls" className="block text-lg font-medium mb-2">
+            Monthly Emergency Calls: <span className="text-blue-400">{emergencyCalls}</span>
           </label>
           <input
             type="range"
-            id="adBudget"
-            min="1000"
-            max="50000"
-            step="500"
-            value={adBudget}
-            onChange={(e) => setAdBudget(Number(e.target.value))}
+            id="emergencyCalls"
+            min="10"
+            max="500"
+            step="10"
+            value={emergencyCalls}
+            onChange={(e) => setEmergencyCalls(Number(e.target.value))}
             className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
           />
         </div>
 
-        {/* Weekly Manual Hours Input */}
+        {/* Average Dispatch Time Input */}
         <div>
-          <label htmlFor="hoursSpent" className="block text-lg font-medium mb-2">
-            Weekly Manual Hours Spent: <span className="text-blue-400">{hoursSpent} hours</span>
+          <label htmlFor="dispatchTime" className="block text-lg font-medium mb-2">
+            Average Dispatch Time (mins): <span className="text-blue-400">{dispatchTime} mins</span>
           </label>
           <input
             type="range"
-            id="hoursSpent"
-            min="1"
-            max="40"
+            id="dispatchTime"
+            min="5"
+            max="60"
             step="1"
-            value={hoursSpent}
-            onChange={(e) => setHoursSpent(Number(e.target.value))}
+            value={dispatchTime}
+            onChange={(e) => setDispatchTime(Number(e.target.value))}
             className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
           />
         </div>
@@ -99,15 +99,15 @@ const ROICalculatorTab = () => {
 
       {/* Live Results */}
       <div className="bg-gray-700 p-4 rounded-lg mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-center">Estimated Performance</h3>
+        <h3 className="text-xl font-semibold mb-4 text-center">Projected Performance Boost</h3>
         <div className="flex justify-around text-center">
           <div>
-            <p className="text-gray-400">Projected ROI:</p>
-            <p className="text-3xl font-bold text-green-400">${projectedROI.toLocaleString()}</p>
+            <p className="text-gray-400">Booked Jobs Rate:</p>
+            <p className="text-3xl font-bold text-green-400">{bookedJobsRate}%</p>
           </div>
           <div>
-            <p className="text-gray-400">Hours Saved / Month:</p>
-            <p className="text-3xl font-bold text-purple-400">{hoursSaved} hours</p>
+            <p className="text-gray-400">Technician Utilization:</p>
+            <p className="text-3xl font-bold text-purple-400">{technicianUtilization}%</p>
           </div>
         </div>
       </div>
