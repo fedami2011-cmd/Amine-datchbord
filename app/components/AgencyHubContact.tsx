@@ -9,10 +9,9 @@ const AgencyHubContact = () => {
 
       {/* Agency Introduction Card */}
       <div className="bg-gray-700 p-6 rounded-lg mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-blue-400">Amine Digital Solutions</h3>
+        <h3 className="text-xl font-semibold mb-4 text-blue-400">Nexus AI</h3>
         <p className="text-gray-300 leading-relaxed">
-          Amine Digital Solutions agency was founded in June 2026 in Algeria by Mohamed El Amine Feddane.
-          We are an agency specializing in AI Automation & Lead Generation Systems.
+          Nexus AI provides an AI & Workflow Automation Control Center tailored for US Real Estate Agents & Brokers.
         </p>
       </div>
 
@@ -37,12 +36,12 @@ const AgencyHubContact = () => {
         <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
         <div className="flex flex-col space-y-4">
           <a
-            href="https://calendly.com/amine-branding-dz/30min"
+            href="https://calendly.com/amine-nexus"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 flex items-center justify-center"
           >
-            Book a Consultation (Calendly)
+            Book a Live Demo
           </a>
           <a
             href="mailto:amine.branding.dz@gmail.com"

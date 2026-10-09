@@ -38,7 +38,7 @@ const ROICalculatorTab = () => {
           dispatchTime,
           bookedJobsRate,
           technicianUtilization,
-          action: 'hvac_automation_demo',
+          action: 'real_estate_automation_demo',
         }),
       });
 
@@ -59,13 +59,13 @@ const ROICalculatorTab = () => {
 
   return (
     <div className="p-6 bg-gray-800 rounded-lg shadow-md text-white">
-      <h2 className="text-2xl font-bold mb-6 text-center">HVAC Automation & Efficiency Calculator</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Real Estate Automation & Efficiency Calculator</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Monthly Emergency Calls Input */}
         <div>
           <label htmlFor="emergencyCalls" className="block text-lg font-medium mb-2">
-            Monthly Emergency Calls: <span className="text-blue-400">{emergencyCalls}</span>
+            Monthly Property Inquiries: <span className="text-blue-400">{emergencyCalls}</span>
           </label>
           <input
             type="range"
@@ -82,7 +82,7 @@ const ROICalculatorTab = () => {
         {/* Average Dispatch Time Input */}
         <div>
           <label htmlFor="dispatchTime" className="block text-lg font-medium mb-2">
-            Average Dispatch Time (mins): <span className="text-blue-400">{dispatchTime} mins</span>
+            Average Response Time (mins): <span className="text-blue-400">{dispatchTime} mins</span>
           </label>
           <input
             type="range"
@@ -102,11 +102,11 @@ const ROICalculatorTab = () => {
         <h3 className="text-xl font-semibold mb-4 text-center">Projected Performance Boost</h3>
         <div className="flex justify-around text-center">
           <div>
-            <p className="text-gray-400">Booked Jobs Rate:</p>
+            <p className="text-gray-400">Booked Viewings Rate:</p>
             <p className="text-3xl font-bold text-green-400">{bookedJobsRate}%</p>
           </div>
           <div>
-            <p className="text-gray-400">Technician Utilization:</p>
+            <p className="text-gray-400">Agent Utilization:</p>
             <p className="text-3xl font-bold text-purple-400">{technicianUtilization}%</p>
           </div>
         </div>

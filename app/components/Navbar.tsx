@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">Amine Digital Solutions Dashboard</h1>
+      <h1 className="text-xl font-bold">Nexus AI</h1>
       <div className="flex items-center">
         <span className="mr-4">Welcome, User!</span>
         <button

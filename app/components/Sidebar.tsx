@@ -16,7 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
 
   return (
     <aside className="w-64 bg-gray-800 text-white p-4">
-      <h2 className="text-2xl font-bold mb-6">Amine Digital Solutions</h2>
+      <h2 className="text-2xl font-bold mb-6">Nexus AI</h2>
       <nav>
         <ul>
           {navItems.map((item) => (

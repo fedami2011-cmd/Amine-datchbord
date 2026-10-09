@@ -32,7 +32,7 @@ const N8N_WEBHOOK_URL =
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] =
-    useState<"calculator" | "leads" | "about">("calculator");
+    useState<"calculator" | "leads" | "upcoming" | "about">("calculator");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [sendingWebhook, setSendingWebhook] = useState(false);
@@ -51,9 +51,9 @@ export default function Dashboard() {
 
   // Mock Leads for Dashboard Demo
   const mockLeads = [
-    { id: 1, name: "CoolBreeze HVAC", email: "service@coolbreeze.com", budget: "$15,000", saved: "55 hrs", tier: "VIP High-Ticket", status: "Automated" },
-    { id: 2, name: "FrostyFix Repairs", email: "contact@frostyfix.com", budget: "$5,000", saved: "20 hrs", tier: "Standard Lead", status: "Processed" },
-    { id: 3, name: "Heating Heroes", email: "support@heatingheroes.net", budget: "$10,000", saved: "40 hrs", tier: "VIP High-Ticket", status: "Automated" },
+    { id: 1, name: "Apex Realty Group", email: "agent@apexrealty.com", budget: "$15,000", saved: "55 hrs", tier: "VIP High-Ticket", status: "Automated" },
+    { id: 2, name: "Metro Homes Miami", email: "info@metrohomesmiami.com", budget: "$5,000", saved: "20 hrs", tier: "Standard Lead", status: "Processed" },
+    { id: 3, name: "Sunset Properties", email: "support@sunsetproperties.us", budget: "$10,000", saved: "40 hrs", tier: "VIP High-Ticket", status: "Automated" },
     { id: 4, name: "Airflow Pros", email: "dispatch@airflowpros.io", budget: "$2,500", saved: "12 hrs", tier: "Standard Lead", status: "Pending" }
   ];
 
@@ -103,7 +103,7 @@ export default function Dashboard() {
   setSuccessMsg("");
 
   const payload = {
-    agency_name: "Amine Digital Solutions",
+    agency_name: "Nexus AI",
     lead_name: leadName || "Valued Client",
     lead_email: leadEmail || "client@example.com",
     active_technicians: activeTechnicians,
@@ -151,8 +151,8 @@ export default function Dashboard() {
             <FaRobot className="text-2xl text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-wide text-white">Amine Digital Solutions</h1>
-            <p className="text-xs text-gray-400">AI & Workflow Automation Control Center</p>
+            <h1 className="text-xl font-bold tracking-wide text-white">Nexus AI</h1>
+            <p className="text-xs text-gray-400">AI & Workflow Automation Control Center for US Real Estate.</p>
           </div>
         </div>
 
@@ -165,7 +165,7 @@ export default function Dashboard() {
             }`}
           >
             <FaCalculator />
-            <span>HVAC Dispatch Calculator</span>
+            <span>Real Estate Calculator</span>
           </button>
           <button
             onClick={() => setActiveTab("leads")}
@@ -175,6 +175,15 @@ export default function Dashboard() {
           >
             <FaUsers />
             <span>Client Dashboard</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("upcoming")}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition whitespace-nowrap ${
+              activeTab === "upcoming" ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+            }`}
+          >
+            <FaBolt />
+            <span>Upcoming Automations</span>
           </button>
           <button
             onClick={() => setActiveTab("about")}
@@ -233,8 +242,9 @@ export default function Dashboard() {
               <div>
                 <div className="flex items-center space-x-3 mb-6">
                   <FaCalculator className="text-blue-500 text-2xl" />
-                  <h2 className="text-xl font-bold text-white">HVAC Dispatch & Emergency ROI Calculator</h2>
+                  <h2 className="text-xl font-bold text-white">Eliminate Missed Calls & Maximize Real Estate Deals</h2>
                 </div>
+                <p className="text-sm text-gray-400 mb-6">AI-Powered Receptionist & Speed-to-Lead for US Real Estate Brokers. Convert property inquiries into booked viewings in under 30 seconds, 24/7.</p>
 
                 <form onSubmit={handleCalculateAndSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -304,7 +314,7 @@ export default function Dashboard() {
                     ) : (
                       <>
                         <FaPaperPlane />
-                        <span>Simulate HVAC Automation & Dispatch Pipeline 🚀</span>
+                        <span>Simulate Real Estate Automation & Lead Pipeline 🚀</span>
                       </>
                     )}
                   </button>
@@ -373,6 +383,34 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* TAB 2: UPCOMING AUTOMATIONS */}
+        {activeTab === "upcoming" && (
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-2xl font-bold text-white mb-2">Upcoming Automations</h2>
+            <p className="text-sm text-gray-400">Exciting new features currently under development.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Card 1 */}
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-white">Full Real Estate CRM Sync</h3>
+                <span className="text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded-full">Coming Soon</span>
+                <p className="text-sm text-gray-400 mt-4">Seamlessly sync your leads and contacts with your favorite CRM.</p>
+              </div>
+              {/* Card 2 */}
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-white">Automated SMS Lead Nurturing</h3>
+                <span className="text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded-full">Coming Soon</span>
+                <p className="text-sm text-gray-400 mt-4">Engage and nurture your leads with automated, personalized SMS campaigns.</p>
+              </div>
+              {/* Card 3 */}
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-white">Lease & Agreement Pipeline</h3>
+                <span className="text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded-full">Coming Soon</span>
+                <p className="text-sm text-gray-400 mt-4">Automate the creation, sending, and tracking of leases and agreements.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* TAB 2: CLIENT DASHBOARD (Demo Analytics) */}
         {activeTab === "leads" && (
           <div className="space-y-6 animate-fade-in">
@@ -390,37 +428,37 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Response Time</span>
+                  <span className="text-sm text-gray-400">Lead Response Speed</span>
                   <FaClock className="text-indigo-400" />
                 </div>
                 <h3 className="text-3xl font-black text-white">&lt; 28s</h3>
-                <p className="text-xs text-emerald-400 mt-2 font-medium">Speed to lead for emergency calls</p>
+                <p className="text-xs text-emerald-400 mt-2 font-medium">Speed to lead for property inquiries</p>
               </div>
               
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Booked Jobs Rate</span>
+                  <span className="text-sm text-gray-400">Booked Viewings Rate</span>
                   <FaCheckCircle className="text-emerald-400" />
                 </div>
                 <h3 className="text-3xl font-black text-white">68.4%</h3>
-                <p className="text-xs text-emerald-400 mt-2 font-medium">Inquiries converted into paid field visits</p>
+                <p className="text-xs text-emerald-400 mt-2 font-medium">Inquiries converted into booked viewings</p>
               </div>
 
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Technician Utilization</span>
+                  <span className="text-sm text-gray-400">Qualified Buyer Ratio</span>
                   <FaBolt className="text-amber-400" />
                 </div>
                 <h3 className="text-3xl font-black text-white">91.2%</h3>
-                <p className="text-xs text-gray-400 mt-2 font-medium">Optimized daily routes with zero double-booking</p>
+                <p className="text-xs text-gray-400 mt-2 font-medium">Optimized lead qualification with zero double-booking</p>
               </div>
               <div className="bg-gray-900 border border-gray-800 p-5 rounded-2xl">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Quote Conversion Speed</span>
+                  <span className="text-sm text-gray-400">Offer Conversion Speed</span>
                   <FaDollarSign className="text-emerald-400" />
                 </div>
-                <h3 className="text-3xl font-black text-white">2.4 hrs</h3>
-                <p className="text-xs text-emerald-400 mt-2 font-medium">Fast approval on sent repair estimates</p>
+                <h3 className="text-3xl font-black text-white">2.4 days</h3>
+                <p className="text-xs text-emerald-400 mt-2 font-medium">Fast approval on submitted offers</p>
               </div>
             </div>
 
